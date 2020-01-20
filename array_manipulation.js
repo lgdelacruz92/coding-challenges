@@ -15,28 +15,23 @@ const createFrame = n => {
 
 const arrayManipulation = (n, queries) => {
   let frame = createFrame(n);
-  let startAdd = false;
-  let max = 0;
-  const m = queries.length; // m = length;
-  for (let i = 0; i < m; i++) {
-    const a = queries[i][0];
+  for (let i = 0; i < queries.length; i++) {
+    const a = queries[i][0] - 1;
     const b = queries[i][1];
     const k = queries[i][2];
 
-    for (let j = 0; j < n; j++) {
-      if (a - 1 <= j && j <= b - 1) {
-        startAdd = true;
-      } else {
-        startAdd = false;
-      }
+    frame[a] += k;
+    if (b < n) {
+      frame[b] -= k;
+    }
+  }
 
-      if (startAdd) {
-        frame[j] = frame[j] + k;
-      }
-
-      if (max < frame[j]) {
-        max = frame[j];
-      }
+  let max = 0;
+  let value = 0;
+  for (let i = 0; i < frame.length; i++) {
+    value += frame[i];
+    if (max < value) {
+      max = value;
     }
   }
   return max;
