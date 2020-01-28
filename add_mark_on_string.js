@@ -47,5 +47,4 @@ const markHello = (str, searchTerm) => {
 };
 
 const result = markHello(test, "hello");
-console.log(result);
 // console.log(replaceAt(test, 0, "Hello"));
