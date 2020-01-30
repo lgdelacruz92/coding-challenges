@@ -55,4 +55,45 @@ const decode = l => {
   return result;
 };
 
-const addTwoNumbers = (l1, l2) => {};
+const addTwoNumbers = (l1, l2) => {
+  let cur1 = l1;
+  let cur2 = l2;
+
+  let carry = 0;
+  let resultArr = [];
+  while (cur1 !== null || cur2 !== null) {
+    let val1 = cur1 !== null ? cur1.val : 0;
+    let val2 = cur2 !== null ? cur2.val : 0;
+
+    let stepResult = val1 + val2 + carry;
+    if (9 < stepResult && stepResult < 20) {
+      carry = 1;
+      stepResult = stepResult % 10;
+    } else if (stepResult > 20 || stepResult < 0) {
+      throw Error("This should never happen");
+    } else {
+      carry = 0;
+    }
+    if (cur1 !== null) {
+      cur1 = cur1.next;
+    }
+    if (cur2 !== null) {
+      cur2 = cur2.next;
+    }
+    resultArr.push(new ListNode(stepResult));
+  }
+
+  if (carry === 1) {
+    resultArr.push(new ListNode(carry));
+  }
+
+  for (let i = 0; i < resultArr.length - 1; i++) {
+    resultArr[i].next = resultArr[i + 1];
+  }
+  return resultArr[0];
+};
+
+const l1 = encode(5);
+const l2 = encode(5);
+const result = addTwoNumbers(l1, l2);
+printListNode(result);
