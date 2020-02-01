@@ -9,85 +9,67 @@ const b = [
   [0, 0]
 ];
 
-const countNode = grid => {
-  // count nodes
-  let nodeCount = 0;
-  for (let i = 0; i < grid.length; i++) {
-    for (let j = 0; j < grid[i].length; j++) {
-      nodeCount += 1;
-    }
-  }
-  return nodeCount;
+const c = [
+  [0, 0, 0, 0],
+  [0, 1, 0, 0],
+  [0, 0, 0, 0],
+  [0, 0, 1, 0],
+  [0, 0, 0, 0]
+];
+
+const d = [[1], [0]];
+const e = [[0]];
+
+const createKey = (i, j) => {
+  return `${i}_${j}`;
 };
 
-const validNeighbor = (location, m, n) => {
-  // console.log(location);
-  return (
-    0 <= location[0] && location[0] < m && 0 <= location[1] && location[1] < n
-  );
-};
+const canReachEnd = (grid, i, j, memo) => {
+  if (i >= grid.length) return false;
 
-const markEdge = (graph, grid, neighbor, i, j) => {
-  let node = grid[i].length * i + j;
-  if (
-    validNeighbor(neighbor, grid.length, grid[i].length) &&
-    grid[neighbor[0]][neighbor[1]] === 0 &&
-    grid[i][j] === 0
-  ) {
-    let neighborNode = grid[i].length * neighbor[0] + neighbor[1];
-    graph[node][neighborNode] = 1;
-  }
-};
+  if (j >= grid[0].length) return false;
 
-const buildGraph = (grid, nodeCount) => {
-  let graph = [];
-  for (let i = 0; i < nodeCount; i++) {
-    let row = [];
-    for (let j = 0; j < nodeCount; j++) {
-      row.push(0);
-    }
-    graph.push(row);
+  if (grid[i][j] === 1) {
+    return false;
   }
 
-  for (let i = 0; i < grid.length; i++) {
-    for (let j = 0; j < grid[i].length; j++) {
-      // neighbors
-      const top = [i - 1, j];
-      const right = [i, j + 1];
-      const bottom = [i + 1, j];
-      const left = [i, j - 1];
-
-      markEdge(graph, grid, top, i, j);
-      markEdge(graph, grid, right, i, j);
-      markEdge(graph, grid, bottom, i, j);
-      markEdge(graph, grid, left, i, j);
-    }
+  if (i === grid.length - 1 && j === grid[0].length - 1) {
+    return true;
   }
-  return graph;
+
+  if (memo[createKey(i, j)] === true) {
+    return true;
+  }
+
+  memo[createKey(i, j)] = true;
+  if (!canReachEnd(grid, i, j + 1, memo)) {
+    memo[createKey(i, j)] = false;
+    return true;
+  }
+  if (!canReachEnd(grid, i + 1, j, memo)) {
+    memo[createKey(i, j)] = false;
+    return true;
+  }
+
+  return false;
 };
 
 const uniquePathsWithObstacles = grid => {
-  const nodeCount = countNode(grid);
-  const graph = buildGraph(grid, nodeCount);
-
-  const visited = {};
-  for (let i = 0; i < graph.length; i++) {
-    for (let j = 0; j < graph[i].length; j++) {
-      if (
-        visited[`${i}_${j}`] === undefined &&
-        visited[`${j}_${i}`] === undefined
-      ) {
-        // not visited
-        if (graph[i][j] === 1 && i !== j) {
-          console.log("valid edge", i, j);
-        }
-        visited[`${i}_${j}`] = true;
-        visited[`${j}_${i}`] = true;
-      }
-    }
+  if (grid.length < 1) {
+    return 0;
+  } else if (grid[0][0] === 0 && grid.length === 1) {
+    return 1;
+  } else if (grid[0][0] === 1) {
+    return 0;
   }
-  // console.log(graph);
+
+  let memo = {};
+  canReachEnd(grid, 0, 0, memo);
+  return Object.keys(memo).length;
 };
 
-uniquePathsWithObstacles(b);
-// buildGraph(a, 9);
+console.log(uniquePathsWithObstacles(a));
+console.log(uniquePathsWithObstacles(b));
+console.log(uniquePathsWithObstacles(c));
+console.log(uniquePathsWithObstacles(d));
+console.log(uniquePathsWithObstacles(e));
