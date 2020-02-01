@@ -148,4 +148,3 @@ const printBoard = board => {
 
 sodokuSolver(board);
 test(board);
-// printBoard(board);
