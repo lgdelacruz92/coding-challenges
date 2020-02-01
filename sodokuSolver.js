@@ -134,6 +134,7 @@ const solve = (i, j, board) => {
 
 const sodokuSolver = board => {
   solve(0, 0, board);
+  printBoard(board);
 };
 
 const printBoard = board => {
