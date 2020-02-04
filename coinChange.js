@@ -1,3 +1,8 @@
+/**
+ * Coin Change version 1
+ * Top down approach
+ */
+
 const coinChangeMemo = (coins, amount, memo) => {
   if (amount === 0) {
     return 0;
