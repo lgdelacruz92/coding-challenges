@@ -10,7 +10,7 @@ const f = (a, curIndex, memo) => {
   const results = [];
   for (let i = curIndex; i < a.length - 1; i++) {
     const { lastValIndex, lastCount } = f(a, i + 1, memo);
-    if (a[i] <= a[lastValIndex]) {
+    if (a[i] < a[lastValIndex]) {
       results.push({ lastValIndex: i, lastCount: lastCount + 1 });
     } else {
       results.push({ lastValIndex, lastCount });
